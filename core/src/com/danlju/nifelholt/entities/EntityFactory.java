@@ -34,12 +34,10 @@ public class EntityFactory {
         List<Integer> rolls = RngUtil.sortedAttributeRolls();
 
         DndStatsComponent statsComponent = new DndStatsComponent();
-
-        int i=0;
+        int index=0;
         for (String attr : CharClassTemplate.archetypes.get(charClass).attributePriority) {
-            statsComponent.set(attr, rolls.get(i++));
+            statsComponent.set(attr, rolls.get(index++));
         }
-
         entity.attach(statsComponent);
 
         entity.initialize();
@@ -47,42 +45,42 @@ public class EntityFactory {
         return entity;
     }
 
-    private Armor armorForClass(CharClass CharClass) {
+    private Armor armorForClass(CharClass charClass) {
 
-        if (CharClass == CharClass.FIGHTER) {
+        if (charClass == CharClass.FIGHTER) {
             return new Armor("Ring mail", "ring_mail", Armor.Type.HEAVY, 14);
-        } else if (CharClass == CharClass.ROGUE) {
+        } else if (charClass == CharClass.ROGUE) {
             return new Armor("Leather armor", "leather", Armor.Type.LIGHT, 11);
-        } else if (CharClass == CharClass.RANGER) {
+        } else if (charClass == CharClass.RANGER) {
             return new Armor("Studded leather armor", "studded_leather", Armor.Type.LIGHT, 12);
-        } else if (CharClass == CharClass.SORCERER) {
+        } else if (charClass == CharClass.SORCERER) {
             return new Armor("Padded armor", "padded_armor", Armor.Type.LIGHT, 11);
         }
 
         return new Armor("Padded armor", "padded_armor", Armor.Type.LIGHT, 11);
     }
 
-    private Weapon weaponForClass(CharClass CharClass) {
+    private Weapon weaponForClass(CharClass charClass) {
 
-        if (CharClass == CharClass.FIGHTER) {
+        if (charClass == CharClass.FIGHTER) {
             return new Weapon("Battleaxe", "battleaxe", 8, 5);
-        } else if (CharClass == CharClass.ROGUE) {
+        } else if (charClass == CharClass.ROGUE) {
             return new Weapon("Dagger", "dagger", 6, 5);
-        } else if (CharClass == CharClass.RANGER) {
+        } else if (charClass == CharClass.RANGER) {
             return new Weapon("Shortbow", "shortbow", 6, 80);
-        } else if (CharClass == CharClass.SORCERER) {
+        } else if (charClass == CharClass.SORCERER) {
             return new Weapon("Quarterstaff", "quarterstaff", 6, 5);
         }
 
-        Gdx.app.log("WARNING", "No weapon for class " + CharClass.name());
+        Gdx.app.log("WARNING", "No weapon for class " + charClass.name());
 
         return new Weapon("Dagger", "dagger", 6, 5);
     }
 
 
-    private static List<Ability> abilitiesForClass(CharClass CharClass) {
+    private static List<Ability> abilitiesForClass(CharClass charClass) {
 
-        if (CharClass == CharClass.SORCERER) {
+        if (charClass == CharClass.SORCERER) {
             return Arrays.asList(Ability.fireball(), Ability.rayOfFrost());
         }
         return Collections.emptyList();
@@ -99,11 +97,14 @@ public class EntityFactory {
 
         StringBuilder name = new StringBuilder();
         for (int i=0; i<nParts; i++) {
+
             List<String> partList = partLists.get(RngUtil.random.nextInt(partLists.size()));
             String part = partList.get(RngUtil.random.nextInt(partList.size()));
+
             if (i > 0) {
                 part = part.toLowerCase(Locale.ROOT);
             }
+
             name.append(part);
         }
 

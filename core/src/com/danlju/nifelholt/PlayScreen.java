@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.danlju.nifelholt.camera.GameCameraComponent;
@@ -48,7 +47,7 @@ public class PlayScreen implements Screen {
         gameWorld = new GameWorld();
         gameWorld.addEntity(gameCameraEntity);
         gameWorld.addSystem(new TilemapSystem(gameCamera, "arena.tmx"));
-        gameWorld.addSystem(new RenderSystem(gameCamera));
+        gameWorld.addSystem(new RenderSystem(gameCamera)); // TODO: remove parameters and use get component instead?
         gameWorld.addSystem(new InputSystem());
         gameWorld.addSystem(new GameCameraSystem());
         gameWorld.initialize();

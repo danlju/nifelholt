@@ -2,20 +2,35 @@ package com.danlju.nifelholt.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.danlju.nifelholt.ability.Ability;
+import com.danlju.nifelholt.battle.BattleComponent;
+import com.danlju.nifelholt.battle.PartyMemberComponent;
 import com.danlju.nifelholt.ecs.Entity;
 import com.danlju.nifelholt.equipment.Armor;
 import com.danlju.nifelholt.equipment.EquipmentComponent;
 import com.danlju.nifelholt.equipment.Weapon;
 import com.danlju.nifelholt.rng.RngUtil;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
+import java.util.stream.IntStream;
 
 public class EntityFactory {
 
-    public Entity randomCharacter(String name) {
+    public List<Entity> randomParty(String partyName, int members) {
+
+        if (members < 1) {
+            throw new IllegalArgumentException("Number of members must be > 0");
+        }
+
+        List<Entity> party = new ArrayList<>();
+
+        IntStream.range(0, members).forEach(
+                i -> party.add(randomCharacter(randomName(), partyName))
+        );
+
+        return party;
+    }
+
+    public Entity randomCharacter(String name, String partyName) {
 
         Entity entity = new Entity();
 
@@ -39,6 +54,10 @@ public class EntityFactory {
             statsComponent.set(attr, rolls.get(index++));
         }
         entity.attach(statsComponent);
+
+        entity.attach(new PartyMemberComponent(partyName));
+
+        entity.attach(new BattleComponent());
 
         entity.initialize();
 

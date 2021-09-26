@@ -13,4 +13,16 @@ public class DndCharComponent implements Component {
         this.race = race;
         this.charClass = charClass;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public Race getRace() {
+        return race;
+    }
+
+    public CharClass getCharClass() {
+        return charClass;
+    }
 }

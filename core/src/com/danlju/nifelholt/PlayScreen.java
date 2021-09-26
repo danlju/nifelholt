@@ -6,10 +6,13 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.danlju.nifelholt.battle.BattleSystem;
+import com.danlju.nifelholt.battle.PartyMemberComponent;
 import com.danlju.nifelholt.camera.GameCameraComponent;
 import com.danlju.nifelholt.camera.GameCameraSystem;
 import com.danlju.nifelholt.ecs.Entity;
 import com.danlju.nifelholt.ecs.GameWorld;
+import com.danlju.nifelholt.entities.EntityFactory;
 import com.danlju.nifelholt.input.InputSystem;
 import com.danlju.nifelholt.rendering.RenderSystem;
 import com.danlju.nifelholt.tilemap.TilemapSystem;
@@ -30,7 +33,6 @@ public class PlayScreen implements Screen {
     @Override
     public void show() {
 
-
         Stage stage = new Stage(new ScreenViewport());
 
         final float width = Gdx.graphics.getWidth();
@@ -50,8 +52,15 @@ public class PlayScreen implements Screen {
         gameWorld.addSystem(new RenderSystem(gameCamera)); // TODO: remove parameters and use get component instead?
         gameWorld.addSystem(new InputSystem());
         gameWorld.addSystem(new GameCameraSystem());
+        gameWorld.addSystem(new BattleSystem(500));
+
         gameWorld.initialize();
 
+        EntityFactory entityFactory = new EntityFactory();
+        entityFactory.randomParty("Heroes", 4).forEach(gameWorld::addEntity);
+        entityFactory.randomParty("Goblins", 4).forEach(gameWorld::addEntity);
+
+        Gdx.app.log("PlayScreen", "Initialization done");
     }
 
     @Override

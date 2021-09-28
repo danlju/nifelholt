@@ -10,7 +10,6 @@ import com.danlju.nifelholt.entities.DndCharComponent;
 import com.danlju.nifelholt.entities.DndStatsComponent;
 import com.danlju.nifelholt.rng.Dice;
 import com.danlju.nifelholt.stats.Modifiers;
-import com.danlju.nifelholt.utils.ArrayUtils;
 
 import java.util.List;
 
@@ -53,6 +52,7 @@ public class BattleSystem extends SubSystem {
             phase = BattlePhase.GET_READY;
             Gdx.app.log("BattleSystem", "Get ready!");
             lastRoll = System.currentTimeMillis();
+
         } else if (phase == BattlePhase.GET_READY) {
 
             if (!initiativeRollsDone()) {

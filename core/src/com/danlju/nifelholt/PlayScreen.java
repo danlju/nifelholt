@@ -7,7 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.danlju.nifelholt.battle.BattleSystem;
-import com.danlju.nifelholt.battle.PartyMemberComponent;
 import com.danlju.nifelholt.camera.GameCameraComponent;
 import com.danlju.nifelholt.camera.GameCameraSystem;
 import com.danlju.nifelholt.ecs.Entity;
@@ -15,6 +14,7 @@ import com.danlju.nifelholt.ecs.GameWorld;
 import com.danlju.nifelholt.entities.EntityFactory;
 import com.danlju.nifelholt.input.InputSystem;
 import com.danlju.nifelholt.rendering.RenderSystem;
+import com.danlju.nifelholt.rendering.TextureHandler;
 import com.danlju.nifelholt.tilemap.TilemapSystem;
 
 public class PlayScreen implements Screen {
@@ -25,6 +25,8 @@ public class PlayScreen implements Screen {
     private Viewport viewport;
     private GameWorld gameWorld;
     private OrthographicCamera gameCamera;
+
+    private TextureHandler textureHandler;
 
     public PlayScreen(NifelholtGame nifelholtGame) {
         this.game = nifelholtGame;
@@ -46,6 +48,8 @@ public class PlayScreen implements Screen {
         gameCameraEntity.attach(new GameCameraComponent(gameCamera));
         gameCameraEntity.initialize();
 
+        textureHandler = new TextureHandler();
+
         gameWorld = new GameWorld();
         gameWorld.addEntity(gameCameraEntity);
         gameWorld.addSystem(new TilemapSystem(gameCamera, "arena.tmx"));
@@ -56,7 +60,7 @@ public class PlayScreen implements Screen {
 
         gameWorld.initialize();
 
-        EntityFactory entityFactory = new EntityFactory();
+        EntityFactory entityFactory = new EntityFactory(textureHandler);
         entityFactory.randomParty("Heroes", 4).forEach(gameWorld::addEntity);
         entityFactory.randomParty("Goblins", 4).forEach(gameWorld::addEntity);
 
@@ -90,6 +94,8 @@ public class PlayScreen implements Screen {
 
     @Override
     public void dispose() {
+
+        textureHandler.dispose();
         gameWorld.cleanup();
     }
 }

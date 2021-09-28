@@ -7,6 +7,10 @@ public class AnimationComponent implements Component {
 
     public TextureRegion currentFrame;
 
+    public AnimationComponent(TextureRegion currentFrame) {
+        this.currentFrame = currentFrame;
+    }
+
     public TextureRegion currentFrame() {
         return currentFrame;
     }

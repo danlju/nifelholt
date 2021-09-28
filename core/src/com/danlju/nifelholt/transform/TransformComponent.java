@@ -5,11 +5,12 @@ import com.danlju.nifelholt.ecs.Component;
 
 public class TransformComponent implements Component {
 
-    private Vector2 position = new Vector2();
+    private Vector2 position;
     private int width;
     private int height;
 
-    public TransformComponent(int width, int height) {
+    public TransformComponent(Vector2 position, int width, int height) {
+        this.position = position;
         this.width = width;
         this.height = height;
     }

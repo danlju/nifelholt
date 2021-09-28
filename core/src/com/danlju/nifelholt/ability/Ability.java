@@ -17,6 +17,7 @@ public class Ability {
     public int cooldown;
 
     public Ability(String name, String id, DamageType damageType, int damageRoll, int rangeFt, int actionCost, int cooldown) {
+
         this.name = name;
         this.id = id;
         this.damageType = damageType;

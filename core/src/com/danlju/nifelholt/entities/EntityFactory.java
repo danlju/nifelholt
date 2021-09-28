@@ -1,19 +1,30 @@
 package com.danlju.nifelholt.entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.danlju.nifelholt.ability.Ability;
+import com.danlju.nifelholt.animation.AnimationComponent;
 import com.danlju.nifelholt.battle.BattleComponent;
 import com.danlju.nifelholt.battle.PartyMemberComponent;
 import com.danlju.nifelholt.ecs.Entity;
 import com.danlju.nifelholt.equipment.Armor;
 import com.danlju.nifelholt.equipment.EquipmentComponent;
 import com.danlju.nifelholt.equipment.Weapon;
+import com.danlju.nifelholt.rendering.RenderComponent;
+import com.danlju.nifelholt.rendering.TextureHandler;
 import com.danlju.nifelholt.rng.RngUtil;
+import com.danlju.nifelholt.transform.TransformComponent;
 
 import java.util.*;
 import java.util.stream.IntStream;
 
 public class EntityFactory {
+
+    private final TextureHandler textureHandler;
+
+    public EntityFactory(TextureHandler textureHandler) {
+        this.textureHandler = textureHandler;
+    }
 
     public List<Entity> randomParty(String partyName, int members) {
 
@@ -34,8 +45,12 @@ public class EntityFactory {
 
         Entity entity = new Entity();
 
+        entity.attach(new TransformComponent(new Vector2(RngUtil.random.nextInt(400), RngUtil.random.nextInt(400)), 32, 32)); // TODO
+
         Race race = Race.HUMAN; // TODO: random race
         CharClass charClass = CharClass.cachedValues.get(RngUtil.random.nextInt(CharClass.valuesSize));
+
+        entity.attach(new AnimationComponent(textureHandler.getByCharClass(charClass)));
 
         DndCharComponent charComponent = new DndCharComponent(name, race, charClass);
         entity.attach(charComponent);

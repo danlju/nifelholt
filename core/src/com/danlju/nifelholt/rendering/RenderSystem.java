@@ -46,6 +46,7 @@ public class RenderSystem extends SubSystem {
 
     @Override
     public void update(float delta) {
+
         this.spriteBatch.setProjectionMatrix(camera.combined);
 
         spriteBatch.begin();
@@ -59,4 +60,5 @@ public class RenderSystem extends SubSystem {
     public void updateEntity(Entity entity, float delta) {
         // noop
     }
+
 }

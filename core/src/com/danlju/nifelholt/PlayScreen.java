@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.danlju.nifelholt.battle.BattlePhase;
 import com.danlju.nifelholt.battle.BattleSystem;
+import com.danlju.nifelholt.battle.PhaseTransition;
 import com.danlju.nifelholt.camera.GameCameraComponent;
 import com.danlju.nifelholt.camera.GameCameraSystem;
 import com.danlju.nifelholt.ecs.Entity;
@@ -16,6 +18,9 @@ import com.danlju.nifelholt.input.InputSystem;
 import com.danlju.nifelholt.rendering.RenderSystem;
 import com.danlju.nifelholt.rendering.TextureHandler;
 import com.danlju.nifelholt.tilemap.TilemapSystem;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class PlayScreen implements Screen {
 
@@ -51,18 +56,21 @@ public class PlayScreen implements Screen {
         textureHandler = new TextureHandler();
 
         gameWorld = new GameWorld();
-        gameWorld.addEntity(gameCameraEntity);
+
+
         gameWorld.addSystem(new TilemapSystem(gameCamera, "arena.tmx"));
         gameWorld.addSystem(new RenderSystem(gameCamera)); // TODO: remove parameters and use get component instead?
         gameWorld.addSystem(new InputSystem());
         gameWorld.addSystem(new GameCameraSystem());
-        gameWorld.addSystem(new BattleSystem(500));
+        gameWorld.addSystem(new BattleSystem(100));
 
         gameWorld.initialize();
 
         EntityFactory entityFactory = new EntityFactory(textureHandler);
         entityFactory.randomParty("Heroes", 4).forEach(gameWorld::addEntity);
         entityFactory.randomParty("Goblins", 4).forEach(gameWorld::addEntity);
+
+        gameWorld.addEntity(gameCameraEntity);
 
         Gdx.app.log("PlayScreen", "Initialization done");
     }

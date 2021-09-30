@@ -64,10 +64,12 @@ public class EntityFactory {
         List<Integer> rolls = RngUtil.sortedAttributeRolls();
 
         DndStatsComponent statsComponent = new DndStatsComponent();
+
         int index=0;
         for (String attr : CharClassTemplate.archetypes.get(charClass).attributePriority) {
             statsComponent.set(attr, rolls.get(index++));
         }
+
         entity.attach(statsComponent);
 
         entity.attach(new PartyMemberComponent(partyName));

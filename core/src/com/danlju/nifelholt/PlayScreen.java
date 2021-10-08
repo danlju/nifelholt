@@ -12,6 +12,7 @@ import com.danlju.nifelholt.camera.GameCameraSystem;
 import com.danlju.nifelholt.ecs.Entity;
 import com.danlju.nifelholt.ecs.GameWorld;
 import com.danlju.nifelholt.entities.EntityFactory;
+import com.danlju.nifelholt.input.InputComponent;
 import com.danlju.nifelholt.input.InputSystem;
 import com.danlju.nifelholt.rendering.RenderSystem;
 import com.danlju.nifelholt.rendering.TextureHandler;
@@ -19,7 +20,7 @@ import com.danlju.nifelholt.tilemap.TilemapSystem;
 
 public class PlayScreen implements Screen {
 
-    public static final float SCALE = 1;///2f;
+    public static final float SCALE = 1;
 
     private final NifelholtGame game;
     private Viewport viewport;
@@ -57,6 +58,10 @@ public class PlayScreen implements Screen {
         gameWorld.addSystem(new InputSystem());
         gameWorld.addSystem(new GameCameraSystem());
         gameWorld.addSystem(new BattleSystem(500));
+
+        Entity inputEntity = new Entity();
+        inputEntity.attach(new InputComponent());
+        gameWorld.addEntity(inputEntity);
 
         gameWorld.initialize();
 

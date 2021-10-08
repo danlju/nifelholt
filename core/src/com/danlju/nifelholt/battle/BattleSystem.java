@@ -8,6 +8,7 @@ import com.danlju.nifelholt.ecs.Event;
 import com.danlju.nifelholt.ecs.SubSystem;
 import com.danlju.nifelholt.entities.DndCharComponent;
 import com.danlju.nifelholt.entities.DndStatsComponent;
+import com.danlju.nifelholt.input.InputComponent;
 import com.danlju.nifelholt.rng.Dice;
 import com.danlju.nifelholt.stats.Modifiers;
 
@@ -28,6 +29,7 @@ public class BattleSystem extends SubSystem {
     private int rollDelayMs = 300;
     private int afterInitDelay = 3000;
     private long initTime = 0;
+    Entity inputEntity;
 
     public BattleSystem(int rollDelayMs) {
         this.rollDelayMs = rollDelayMs;
@@ -37,10 +39,10 @@ public class BattleSystem extends SubSystem {
     public void initialize() {
 
         super.initialize();
+
         this.setEntities(
                 world().entities(ComponentMatcher.forType(BattleComponent.class))
         );
-        Gdx.app.log("BattleSystem", "initialize()");
 
         initTime = System.currentTimeMillis();
     }
@@ -48,7 +50,16 @@ public class BattleSystem extends SubSystem {
     @Override
     public void updateEntity(Entity entity, float delta) {
 
+        this.inputEntity = world().entities(ComponentMatcher.forType(InputComponent.class)).get(0);
+
+        updatePhase(entity);
+
+    }
+
+    private void updatePhase(Entity entity) {
+
         if (phase == BattlePhase.INIT && System.currentTimeMillis() - initTime >= afterInitDelay) {
+
             phase = BattlePhase.GET_READY;
             Gdx.app.log("BattleSystem", "Get ready!");
             lastRoll = System.currentTimeMillis();
@@ -66,8 +77,20 @@ public class BattleSystem extends SubSystem {
 
                 phase = BattlePhase.FIGHT; // TODO
                 Gdx.app.log("DEBUG", "Initiative rolls done");
+
+                if (inputComponent().mouseJustPressed) {
+
+                    Gdx.app.log("Input", "Mouse just pressed " + Gdx.input.getX() + "," + Gdx.input.getY());
+                    inputComponent().mouseJustPressed = false;
+                    inputComponent().mouseJustPressedHandled = false;
+                }
+
             }
         }
+    }
+
+    private InputComponent inputComponent() {
+        return inputEntity.get(InputComponent.class);
     }
 
     private boolean hasRolled(Entity entity) {

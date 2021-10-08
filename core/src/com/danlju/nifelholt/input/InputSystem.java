@@ -1,26 +1,22 @@
 package com.danlju.nifelholt.input;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.danlju.nifelholt.ecs.ComponentMatcher;
 import com.danlju.nifelholt.ecs.Entity;
 import com.danlju.nifelholt.ecs.Event;
 import com.danlju.nifelholt.ecs.SubSystem;
 
-/***
- * Handle keyboard and controller input.
- * Modifies {@link com.danlju.nifelholt.movement.MovementComponent}
- * TODO: which class?
- */
 public class InputSystem extends SubSystem implements InputProcessor {
-
-    private boolean upButtonPressed = false;
-    private boolean leftButtonPressed = false;
-    private boolean rightButtonPressed = false;
-    private boolean downButtonPressed = false;
 
     public InputSystem() {
         Gdx.input.setInputProcessor(this);
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        setEntities(world().entities(ComponentMatcher.forType(InputComponent.class)));
     }
 
     @Override
@@ -42,38 +38,12 @@ public class InputSystem extends SubSystem implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-
-        if (keycode == Input.Keys.SPACE) {
-            upButtonPressed = true;
-        }
-        if (keycode == Input.Keys.DOWN) {
-            downButtonPressed = true;
-        }
-        if (keycode == Input.Keys.LEFT) {
-            leftButtonPressed = true;
-        }
-        if (keycode == Input.Keys.RIGHT) {
-            rightButtonPressed = true;
-        }
-
-        return true;
+        return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-
-        if (keycode == Input.Keys.SPACE) {
-            Gdx.app.log("keyUp", "space");
-            upButtonPressed = false;
-        }
-        if (keycode == Input.Keys.LEFT) {
-            leftButtonPressed = false;
-        }
-        if (keycode == Input.Keys.RIGHT) {
-            rightButtonPressed = false;
-        }
-
-        return true;
+        return false;
     }
 
     @Override
@@ -83,7 +53,12 @@ public class InputSystem extends SubSystem implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
+
+        InputComponent ic = world().entities(ComponentMatcher.forType(InputComponent.class)).get(0).get(InputComponent.class);
+        ic.mouseJustPressed = true;
+        ic.mouseJustPressedHandled = false;
+
+        return true;
     }
 
     @Override

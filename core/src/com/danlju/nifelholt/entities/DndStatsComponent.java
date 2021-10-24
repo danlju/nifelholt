@@ -9,6 +9,8 @@ public class DndStatsComponent implements Component {
 
     private final Map<String, Integer> attributes = new HashMap<>();
 
+    private int hitPointsMax;
+
     private int hitPoints;
 
     private int armorClass;
@@ -22,8 +24,9 @@ public class DndStatsComponent implements Component {
         setAttributes(0, 0, 0, 0, 0, 0);
     }
 
-    public DndStatsComponent(int hitPoints, int armorClass, int proficiencyBonus, int walkingSpeed) {
-        this.hitPoints = hitPoints;
+    public DndStatsComponent(int hitPointsMax, int armorClass, int proficiencyBonus, int walkingSpeed) {
+        this.hitPointsMax = hitPointsMax;
+        this.hitPoints = this.hitPointsMax;
         this.armorClass = armorClass;
         this.proficiencyBonus = proficiencyBonus;
         this.walkingSpeed = walkingSpeed;
@@ -36,6 +39,14 @@ public class DndStatsComponent implements Component {
         attributes.put("int", intel);
         attributes.put("wis", wis);
         attributes.put("char", charis);
+        updateStats();
+    }
+
+    // TODO: maybe do this differently
+    private void updateStats() {
+        hitPointsMax = get("con");
+        hitPoints = hitPointsMax;
+        // TODO: proficiency bonus
     }
 
     public Integer get(final String attr) {
@@ -44,8 +55,12 @@ public class DndStatsComponent implements Component {
 
     public void set(final String attr, final Integer value) {
         attributes.put(attr, value);
+        updateStats();
     }
 
+    public int getHitPointsMax() {
+        return hitPointsMax;
+    }
 
     public int getHitPoints() {
         return hitPoints;
